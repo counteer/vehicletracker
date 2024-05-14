@@ -3,6 +3,8 @@ package com.homework.vehicletracker.dto;
 public class VehicleDTO {
     private Long id;
 
+    private String message;
+
     public Long getId() {
         return id;
     }
@@ -27,6 +29,16 @@ public class VehicleDTO {
         this.longitude = longitude;
     }
 
+
+
     private Double latitude;
     private Double longitude;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

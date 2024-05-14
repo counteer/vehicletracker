@@ -1,11 +1,5 @@
 package com.homework.vehicletracker.entity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.ManyToOne;
-
-
+import jakarta.persistence.*;
 
 
 @Entity
@@ -15,12 +9,17 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 
     private String message;
 
     public Notification() {
+    }
+
+    public Notification(Vehicle vehicle) {
+        this.vehicle = vehicle;
     }
 
     public Long getId() {

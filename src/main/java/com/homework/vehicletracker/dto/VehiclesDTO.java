@@ -6,23 +6,34 @@ import java.util.List;
 
 public class VehiclesDTO {
 
-    private List<Vehicle> vehicles;
+    private List<VehicleDTO> vehicles;
 
-    private Vehicle central;
+    private VehicleDTO central;
 
-    public List<Vehicle> getVehicles() {
+    public List<VehicleDTO> getVehicles() {
         return vehicles;
     }
 
     public void setVehicles(List<Vehicle> vehicles) {
-        this.vehicles = vehicles;
+        this.vehicles = vehicles.stream().map(this::convert).toList();
     }
 
-    public Vehicle getCentral() {
+    public VehicleDTO getCentral() {
         return central;
     }
 
     public void setCentral(Vehicle central) {
-        this.central = central;
+        this.central = convert(central);
+    }
+
+    private VehicleDTO convert(Vehicle vehicle) {
+        VehicleDTO converted = new VehicleDTO();
+        converted.setLongitude(vehicle.getLongitude());
+        converted.setLatitude(vehicle.getLatitude());
+        converted.setId(vehicle.getId());
+        if (vehicle.getNotification() != null) {
+            converted.setMessage(vehicle.getNotification().getMessage());
+        }
+        return converted;
     }
 }

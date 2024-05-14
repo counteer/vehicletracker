@@ -20,10 +20,10 @@ public class NotificationService {
 
     private final VehicleRepository vehicleRepository;
 
-    public void addNotification(NotificationDTO notificationDTO){
-        Notification notification = new Notification();
+    public void addNotification(NotificationDTO notificationDTO) {
+        Vehicle vehicle = vehicleRepository.findById(notificationDTO.getVehicleId()).orElseThrow(() -> new EntityNotFoundException("NOT FOUND"));
+        Notification notification = notificationRepository.findByVehicle(vehicle).orElse(new Notification(vehicle));
         notification.setMessage(notificationDTO.getMessage());
-        Vehicle vehicle = vehicleRepository.findById(notificationDTO.getVehicleId()) .orElseThrow(() -> new EntityNotFoundException("NOT FOUND"));
 
         notification.setVehicle(vehicle);
         notificationRepository.save(notification);
