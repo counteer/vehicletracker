@@ -3,7 +3,6 @@ package com.homework.vehicletracker.service;
 import com.homework.vehicletracker.dto.VehicleDTO;
 import com.homework.vehicletracker.entity.Vehicle;
 import com.homework.vehicletracker.repository.VehicleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +11,11 @@ import java.util.stream.Collectors;
 @Service
 public class VehicleService {
 
-    @Autowired
-    private VehicleRepository vehicleRepository;
+    public VehicleService(VehicleRepository vehicleRepository) {
+        this.vehicleRepository = vehicleRepository;
+    }
+
+    private final VehicleRepository vehicleRepository;
 
     public Vehicle getVehicleById(Long id) {
         return vehicleRepository.findById(id).orElseThrow();
@@ -34,7 +36,7 @@ public class VehicleService {
     }
 
     public List<Vehicle> getVehiclesInRadius(double latitude, double longitude, double radius) {
-        List<Vehicle> vehicles = vehicleRepository.findAll();
+        List<Vehicle> vehicles = vehicleRepository.findAllByLatitudeIsNotNullAndLongitudeIsNotNull();
         return vehicles.stream()
                 .filter(element -> haversineDistance(latitude, longitude, element.getLatitude(), element.getLongitude()) <= radius)
                 .collect(Collectors.toList());
