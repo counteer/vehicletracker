@@ -11,11 +11,15 @@ import java.util.stream.Collectors;
 @Service
 public class VehicleService {
 
-    public VehicleService(VehicleRepository vehicleRepository) {
+    private final VehicleRepository vehicleRepository;
+
+    private final DistanceService distanceService;
+
+    public VehicleService(VehicleRepository vehicleRepository, DistanceService distanceService) {
         this.vehicleRepository = vehicleRepository;
+        this.distanceService = distanceService;
     }
 
-    private final VehicleRepository vehicleRepository;
 
     public Vehicle getVehicleById(Long id) {
         return vehicleRepository.findById(id).orElseThrow();
@@ -38,7 +42,7 @@ public class VehicleService {
     public List<Vehicle> getVehiclesInRadius(double latitude, double longitude, double radius) {
         List<Vehicle> vehicles = vehicleRepository.findAllByLatitudeIsNotNullAndLongitudeIsNotNull();
         return vehicles.stream()
-                .filter(element -> haversineDistance(latitude, longitude, element.getLatitude(), element.getLongitude()) <= radius)
+                .filter(element -> distanceService.haversineDistance(latitude, longitude, element.getLatitude(), element.getLongitude()) <= radius)
                 .collect(Collectors.toList());
     }
 
@@ -49,14 +53,5 @@ public class VehicleService {
         vehicleRepository.save(vehicle);
     }
 
-    private double haversineDistance(double lat1, double lon1, double lat2, double lon2) {
-        double latDistance = Math.toRadians(lat2 - lat1);
-        double lonDistance = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
-                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        final int earthRadius = 6_371_000;
-        return earthRadius * c;
-    }
+
 }

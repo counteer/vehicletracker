@@ -32,7 +32,7 @@ class VehicleTrackerApplicationTests {
     TestRestTemplate restTemplate = new TestRestTemplate();
 
     @Test
-    public void testGetVehicleEndpoint() {
+    public void testVehicleEndpoints() {
         vehicleRepository.deleteAll();
         ResponseEntity<Void> initResult = restTemplate
                 .exchange(getUrlWithPort("/vehicles"), HttpMethod.POST, null, Void.class);
@@ -59,7 +59,6 @@ class VehicleTrackerApplicationTests {
                         200.0);
         int vehiclesInRadius = getVehiclesInRadius.getBody().getVehicles().size();
         assertThat(vehiclesInRadius, is(1));
-
     }
 
     private String getUrlWithPort(String uri) {
@@ -72,4 +71,5 @@ class VehicleTrackerApplicationTests {
         vehicle.setLongitude(1.0);
         return vehicle;
     }
+
 }

@@ -20,6 +20,9 @@ import java.util.regex.Pattern;
 
 @Service
 public class WebSocketHandler extends TextWebSocketHandler {
+
+    public static final int REFRESH_RATE = 100;
+
     private final ObjectMapper objectMapper;
 
     private final VehicleService vehicleService;
@@ -51,11 +54,11 @@ public class WebSocketHandler extends TextWebSocketHandler {
             String id = matcher.group(1);
             return Long.parseLong(id);
         } else {
-            return null; // ID not found in the path
+            return null;
         }
     }
 
-    @Scheduled(fixedRate = 100) // Send update every second
+    @Scheduled(fixedRate = REFRESH_RATE)
     public void sendPeriodicDto() {
         if (sessions.isEmpty()) {
             return;

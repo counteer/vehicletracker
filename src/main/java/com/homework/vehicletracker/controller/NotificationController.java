@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Controller
 public class NotificationController {
 
+    private final NotificationService notificationService;
+
     public NotificationController(NotificationService notificationService) {
         this.notificationService = notificationService;
     }
-
-    private final NotificationService notificationService;
 
     @PostMapping("/notifications")
     public ResponseEntity<Void> addNotification(@RequestBody NotificationDTO notification) {

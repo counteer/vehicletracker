@@ -23,7 +23,9 @@ public class VehiclesDTO {
     }
 
     public void setCentral(Vehicle central) {
-        this.central = convert(central);
+        if (central != null) {
+            this.central = convert(central);
+        }
     }
 
     private VehicleDTO convert(Vehicle vehicle) {
