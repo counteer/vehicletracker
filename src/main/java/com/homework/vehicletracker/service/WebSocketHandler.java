@@ -3,6 +3,7 @@ package com.homework.vehicletracker.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.homework.vehicletracker.dto.VehiclesDTO;
 import com.homework.vehicletracker.entity.Vehicle;
+import com.homework.vehicletracker.exceptions.WebsocketSerializationException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
@@ -74,7 +75,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
             try {
                 session.sendMessage(new TextMessage(objectMapper.writeValueAsString(vehiclesDTO)));
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new WebsocketSerializationException("Incorrect dto", e);
             }
         }
     }
